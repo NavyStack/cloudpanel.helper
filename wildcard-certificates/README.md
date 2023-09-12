@@ -1,21 +1,37 @@
-# Connect wildcard certificate obtained by acme.sh to CloudPanel sites
+# acme.sh로 발급한 와일드 카드 인증서 CloudPanel사이트에 연결하기
 
-## Install incrontab
+## incrontab 설치하기
 
-Use `apt install incron` to install incron. It will listen to inode changes and can run commands on different inode events
+`apt install incron`을 통해서 incorn을 설치합니다. inode 변경 사항을 수신하고 다양한 inode 이벤트에서 명령을 실행할 수 있습니다.
 
-## Install the script
+## 스크립트 파일 복사하기
 
-Copy the file `clp-install-certificate` to `/usr/local/bin/` and change the variables inside to match the path to your acme.sh
+`clp-install-certificate` 파일을 `/usr/local/bin/`의 경로로 복사합니다. acme.sh에서 경로를 수정하실 수 있습니다.
 
-## Setup acme.sh
+```
+chmod +x /usr/local/bin/clp-install-certificate
+```
 
-Install and setup [acme.sh](https://github.com/acmesh-official/acme.sh) to obtain certificates. Use the command `/usr/local/bin/clp-install-certificate && service nginx force-reload` to connect the new certificates and reload nginx after a new Let's Encrypt certificate was obtained.
+위의 명령을 통해서 실행권한을 부여합니다.
 
-## Setup incron
+## acme.sh 설치하기
 
-Run `incrontab -e` in your SSH terminal to open the editor. Then add the line:
+[acme.sh](https://github.com/acmesh-official/acme.sh) 를 설치 및 설정하여 인증서를 받습니다. '/usr/local/bin/clp-install-certificate && service nginx force-reload` 명령을 사용하여 새 인증서를 연결하고 새 인증서를 발급한 후 nginx를 다시 로드합니다.
+
+## incron 설정하기
+
+```
+echo "root" | sudo tee -a /etc/incron.allow
+```
+
+명령으로 root 사용자에 incron사용 권한을 추가합니다.
+
+그리고 `incrontab -e` 을 통해서 다음의 내용을 추가합니다.
+
 ```
 /etc/nginx/sites-enabled/       IN_CREATE                       /usr/local/bin/clp-install-certificate $#
 ```
-This will trigger the script whenever a new site is created in CloudPanel. The clp-install-certificate will get the filename of the config and extract the domain from the filename and install the acme.sh wildcard certificate for it.
+
+이제, CloudPanel에서 새 사이트가 만들어질 때마다 스크립트가 트리거됩니다. clp-install-certificate는 구성의 파일 이름을 가져오고 파일 이름에서 도메인을 추출하여 해당 도메인에 대한 acme.sh 와일드카드 인증서를 설치합니다.
+
+따라서, 새 사이트를 만드시기 전에 인증서를 우선 발급받으시기 바랍니다.
