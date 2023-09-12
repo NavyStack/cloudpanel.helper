@@ -35,3 +35,5 @@ echo "root" | sudo tee -a /etc/incron.allow
 이제, CloudPanel에서 새 사이트가 만들어질 때마다 스크립트가 트리거됩니다. clp-install-certificate는 구성의 파일 이름을 가져오고 파일 이름에서 도메인을 추출하여 해당 도메인에 대한 acme.sh 와일드카드 인증서를 설치합니다.
 
 따라서, 새 사이트를 만드시기 전에 인증서를 우선 발급받으시기 바랍니다.
+
+추가적으로, [Installing a Certificate](https://www.cloudpanel.io/docs/v2/cloudpanel-cli/root-user-commands/#installing-a-certificate)를 참고하세요.
