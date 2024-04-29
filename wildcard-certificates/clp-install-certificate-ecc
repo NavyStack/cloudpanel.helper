@@ -16,7 +16,7 @@ if [ $# -eq 1 ]; then
 else
   # If no parameter is provided, retrieve domains from the database
   # SQLite query
-  query="SELECT domain_name FROM site WHERE domain_name LIKE '%htpc.zone';"
+  query="SELECT domain_name FROM site WHERE domain_name LIKE '%';"
 
   # Execute SQLite query and retrieve domains
   domains=$(sqlite3 /home/clp/htdocs/app/data/db.sq3 "$query")
@@ -25,7 +25,7 @@ fi
 for domain in $domains; do
   root_domain=$(get_root_domain "$domain")
   certificate=/root/.acme.sh/${root_domain}_ecc/fullchain.cer
-  private_key=/root/.acme.sh/${root_domain}_ecc/$root_domain.key
+  private_key=/root/.acme.sh/${root_domain}_ecc/${root_domain}.key
 
   # Execute the command for each domain
   command="/usr/bin/clpctl site:install:certificate --domainName=$domain --privateKey=$private_key --certificate=$certificate"
