@@ -54,7 +54,7 @@ acme.sh --issue --dns dns_cf \
 -d *.askfront.com \
 --force \
 --keylength ec-256 \
---server google
+--server google \
 --renew-hook /usr/local/bin/clp-install-certificate askfront.com
 ```
 발급할때 바로 적용하는 방법은 위와 같습니다.
